@@ -8,20 +8,19 @@ class Workspace(db.Model):
     available_from = db.Column(db.Time(16))# kellonaika josta lähtien varattavissa 16 [datetime]
     available_till = db.Column(db.Time(21)) # kellonaika johon asti varattavissa 21 [datetime]
 
+    reservations = db.relationship('Reservation', backref='workspace')
 
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()    
 
     @classmethod
     def get_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
-        
-    @classmethod
-    def get_all(cls):
-        return cls.query.all()    
     
     def save(self):
         db.session.add(self)
         db.session.commit()
-
 
     def delete(self):
         db.session.delete(self)

@@ -9,9 +9,17 @@ class Reservation(db.Model):
     user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
 
     @classmethod
-    def get_all_future_reservations(cls):
-        return cls.query.filter_by(start_time=today).all()
+    def get_all_future_reservations(cls, today): # today = datetime.datetime.now() resource methodin JSONiin
+        return cls.query.filter_by(start_time>=today).all()
 
     @classmethod
-    def get_reservations_by_workspace_id(cls, workspace_id):
-        return cls.query.filter_by(id=recipe_id).first()
+    def get_all_reservations_by_workspace_id(cls, workspace_id, today): # today = datetime.datetime.now() resource methodin JSONiin
+        return cls.query.filter_by(id=workspace_id, start_time>=today).all()
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
