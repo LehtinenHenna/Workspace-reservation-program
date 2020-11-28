@@ -2,6 +2,7 @@ from extensions import db
 
 class Reservation(db.Model):
     __tablename__ = 'reservation'
+    
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime(), nullable=False)
     end_time = db.Column(db.DateTime(), nullable=False)

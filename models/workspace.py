@@ -2,6 +2,7 @@ from extension import db
 
 class Workspace(db.Model):
     __tablename__ = 'workspace'
+    
     id = db.Column(db.Integer, primary_key=True) # automatic id tietokannasta
     name = db.Column(db.Str(100), nullable=False)# tilan nimi
     user_limit = db.Column(db.Integer())# maksimi käyttäjämäärä

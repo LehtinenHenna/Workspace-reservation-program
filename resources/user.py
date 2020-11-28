@@ -6,10 +6,10 @@ from webargs import fields
 from webargs.flaskparser import use_kwargs
 from models.user import User
 #from schemas.recipe import RecipeSchema
-#from schemas.user import UserSchema
+from schemas.user import UserSchema
 
 #recipe_list_schema = RecipeSchema(many=True)
-#user_schema = UserSchema()
+user_schema = UserSchema()
 #user_public_schema = UserSchema(exclude=('email', ))
 
 
@@ -17,8 +17,8 @@ class UserListResource(Resource):
     """Create new user"""
 
     def post(self):
+        """POST -> /users"""
         json_data = request.get_json()
-
         data, errors = user_schema.load(data=json_data)
 
         if errors:
