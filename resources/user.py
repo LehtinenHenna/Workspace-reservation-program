@@ -5,11 +5,10 @@ from http import HTTPStatus
 from webargs import fields
 from webargs.flaskparser import use_kwargs
 from models.user import User
-#from schemas.recipe import RecipeSchema
 from schemas.user import UserSchema
 
-#recipe_list_schema = RecipeSchema(many=True)
 user_schema = UserSchema()
+#recipe_list_schema = RecipeSchema(many=True)
 #user_public_schema = UserSchema(exclude=('email', ))
 
 
