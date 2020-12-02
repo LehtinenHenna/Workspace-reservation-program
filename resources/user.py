@@ -8,13 +8,14 @@ from models.user import User
 from schemas.user import UserSchema
 
 user_schema = UserSchema()
+user_public_schema = UserSchema(exclude=('email', ))
 #recipe_list_schema = RecipeSchema(many=True)
-#user_public_schema = UserSchema(exclude=('email', ))
 
 
 class UserListResource(Resource):
-    """Create new user"""
+    """Create new user. Require admin rights."""
 
+    @jwt_required
     def post(self):
         """POST -> /users"""
         json_data = request.get_json()
@@ -29,18 +30,22 @@ class UserListResource(Resource):
         if User.get_by_email(data.get('email')):
             return {'message': 'email already used'}, HTTPStatus.BAD_REQUEST
 
-        user = User(**data)
-        user.save()
+        current_user = get_jwt_identity()
 
-        return user_schema.dump(user).data, HTTPStatus.CREATED
+        if current_user == "admin":
+            user = User(**data)
+            user.save()
+            return user_schema.dump(user).data, HTTPStatus.CREATED
+        else:
+            return {"message": "no admin authorization"}, HTTPStatus.FORBIDDEN
 
 
 class UserResource(Resource):
-    """Get user information by username"""
+    """Get user information by username. Require admin rights."""
 
-    @jwt_optional
+    @jwt_required
     def get(self, username):
-
+        """GET -> /users/<string:username>"""
         user = User.get_by_username(username=username)
 
         if user is None:
@@ -48,19 +53,21 @@ class UserResource(Resource):
 
         current_user = get_jwt_identity()
 
-        if current_user == user.id:
+        if current_user == "admin":
             data = user_schema.dump(user).data
+            return data, HTTPStatus.OK
         else:
-            data = user_public_schema.dump(user).data
+            return {"message": "no admin authorization"}, HTTPStatus.FORBIDDEN
 
-        return data, HTTPStatus.OK
+        
 
 
 class MeResource(Resource):
-    """Get user information by login"""
+    """Get own user information when logged in"""
     
     @jwt_required
     def get(self):
-        user = User.get_by_id(id=get_jwt_identity())
+        """GET -> /me"""
+        user = User.get_by_username(username=get_jwt_identity())
 
         return user_schema.dump(user).data, HTTPStatus.OK
