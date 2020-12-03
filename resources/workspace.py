@@ -55,7 +55,7 @@ class WorkspaceResource(Resource):
         json_data = request.get_json()
         workspace = Workspace.get_by_id(workspace_id=workspace_id)
         if workspace is None:
-            return {'message''Workspace not found':}, HTTPStatus.NOT_FOUND
+            return {'message':'Workspace not found'}, HTTPStatus.NOT_FOUND
         workspace.name = json_data('name')
         workspace.user_limit = json_data('user_limit')
         workspace.available_from = json_data('available_from')
@@ -67,6 +67,6 @@ class WorkspaceResource(Resource):
         """DELETE /workspaces/workspace_id"""
         workspace = Workspace.get_by_id(workspace_id=workspace_id)
         if workspace is None:
-            return {'message''Workspace not found':}, HTTPStatus.NOT_FOUND
+            return {'message':'Workspace not found'}, HTTPStatus.NOT_FOUND
         workspace.delete()
         return {}, HTTPStatus.NO_CONTENT
