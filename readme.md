@@ -80,16 +80,15 @@ End point design:
 
 | HTTP verb |                Description                 |   Methods to handle the request   |                          URL                           |                          Comments                     |
 |-|-|-|-|-|
-| GET | Gets all workspaces | WorkspaceListResource.get | http://localhost:5000/workspaces | Workspaces include information about reservations made to them |
+| GET | Gets all workspaces | WorkspaceListResource.get | http://localhost:5000/workspaces | Workspaces include information about reservations made to them. Admin also sees the users who made the reservations |
 | POST | Create a new workspace | WorkspaceListResource.post | http://localhost:5000/workspaces | Only accessible by Admin |
-| GET | Gets a specific workspace |  | http://localhost:5000/workspaces/<int:workspace_id> | Gets details about a workspace by its ID |
-| PUT | Modify a workspace |  | http://localhost:5000/workspaces/<int:workspace_id> | Only accessible by Admin |
-| DELETE | Delete a workspace |  | http://localhost:5000/workspaces/<int:workspace_id> | Only accessible by Admin |
+| GET | Gets a specific workspace | WorkspaceResource.get | http://localhost:5000/workspaces/<string:workspace_name> | Includes reservation info. Admin also sees info about the user who made the reservation |
+| PUT | Modify a workspace | WorkspaceResource.put | http://localhost:5000/workspaces/<string:workspace_name> | Only accessible by Admin |
+| DELETE | Delete a workspace | WorkspaceResource.delete | http://localhost:5000/workspaces/<string:workspace_name> | Only accessible by Admin |
 | POST | Create a user | UserListResource.post | http://localhost:5000/users |  |
 | GET | Get user information by username | UserResource.get | http://localhost:5000/users/<string:username> | Only accessible by Admin |
 | GET | Get user's own information | MeResource.get | http://localhost:5000/me | Gets username, email, future reservations made by user |
-| GET | Get future reservations by workspace name |  | http://localhost:5000/workspaces/<string:workspace_name> | Unlike Users, Admin will also see info about the user who made the reservation. |
-| GET | Get user's own reservations |  | http://localhost:5000/reservations |  |
-| POST | Create a reservation |  | http://localhost:5000/reservations |  |
-| DELETE | Delete old reservations |  | http://localhost:5000/reservations | Automatically deletes old reservations once a week (optional) |
-| DELETE | Delete user's own reservation by ID |  | http://localhost:5000/reservations/<int:reservation_id> |  |
+| GET | Get user's own reservations | ReservationListResource.get | http://localhost:5000/reservations |  |
+| POST | Create a reservation | ReservationListResource.post | http://localhost:5000/reservations |  |
+| DELETE | Delete old reservations | ReservationListResource.delete | http://localhost:5000/reservations | Automatically deletes old reservations once a week (optional) |
+| DELETE | Delete user's own reservation by ID | ReservationResource | http://localhost:5000/reservations/<int:reservation_id> |  |
