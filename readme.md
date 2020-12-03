@@ -80,20 +80,23 @@ End point design:
 
 | HTTP verb |                Description                 |   Methods to handle the request   |                          URL                           |                          Comments                     | Done |
 |-|-|-|-|-|-|
-| GET | Gets all workspaces | WorkspaceListResource.get | http://localhost:5000/workspaces | Workspaces include information about reservations made to them. Admin also sees the users who made the reservations |  |
+| GET | Gets all workspaces | WorkspaceListResource.get | http://localhost:5000/workspaces | Workspaces include information about reservations, accessible without logging in. Admin also sees the users who made the reservations. |  |
 | POST | Create a new workspace | WorkspaceListResource.post | http://localhost:5000/workspaces | Only accessible by Admin |  |
-| GET | Gets a specific workspace | WorkspaceResource.get | http://localhost:5000/workspaces/<string:workspace_name> | Includes reservation info. Admin also sees info about the user who made the reservation |  |
+| GET | Gets a specific workspace | WorkspaceResource.get | http://localhost:5000/workspaces/<string:workspace_name> | Includes reservation info, accessible without logging in. Admin also sees info about the user who made the reservation. |  |
 | PUT | Modify a workspace | WorkspaceResource.put | http://localhost:5000/workspaces/<string:workspace_name> | Only accessible by Admin |  |
 | DELETE | Delete a workspace | WorkspaceResource.delete | http://localhost:5000/workspaces/<string:workspace_name> | Only accessible by Admin |  |
-| POST | Create a user | UserListResource.post | http://localhost:5000/users |  |  |
+| GET | Gets information about all users | UserListResource.get | http://localhost:5000/users | Only accessible by Admin |  |
+| POST | Create a user | UserListResource.post | http://localhost:5000/users | Anyone can create a user |  |
 | GET | Get user information by username | UserResource.get | http://localhost:5000/users/<string:username> | Only accessible by Admin |  |
+| PUT | Modify any user's information | UserResource.put | http://localhost:5000/users/<string:username> | Only accessible by Admin; Admin can change any user's email, name or password |  |
 | DELETE | Delete user account by username | UserResource.delete | http://localhost:5000/users/<string:username> | Only accessible by Admin |  |
-| GET | Get user's own information | MeResource.get | http://localhost:5000/me | Gets username, email, future reservations made by user |  |
+| GET | Get user's own information | MeResource.get | http://localhost:5000/me | Gets user's own username, email, future reservations |  |
+| PUT | Modify user's own information | MeResource.put | http://localhost:5000/me | User can modify their own username, email or password |  |
 | DELETE | Delete user's own account | MeResource.delete | http://localhost:5000/me | Delete user's own account |  |
-| GET | Get user's own reservations | ReservationListResource.get | http://localhost:5000/reservations |  |  |
-| POST | Create a reservation | ReservationListResource.post | http://localhost:5000/reservations |  |  |
+| GET | Get user's own reservations | ReservationListResource.get | http://localhost:5000/reservations | Displays user's own reservations |  |
+| POST | Create a reservation | ReservationListResource.post | http://localhost:5000/reservations | Only for logged in users |  |
 | DELETE | Delete old reservations | ReservationListResource.delete | http://localhost:5000/reservations | Automatically deletes old reservations once a week (optional) |  |
-| DELETE | Delete user's own reservation by ID | ReservationResource.delete | http://localhost:5000/reservations/<int:reservation_id> |  |  |
+| DELETE | Delete user's own reservation by ID | ReservationResource.delete | http://localhost:5000/reservations/<int:reservation_id> | User can delete their own reservation |  |
 | POST | Create a json web token | TokenResource.post | http://localhost:5000/token |  | X |
 | POST | Create a refresh token | RefreshResource.post | http://localhost:5000/refresh |  | X |
 | POST | Blacklists token for logout | RevokeResource.post | http://localhost:5000/revoke |  | X |
