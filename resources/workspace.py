@@ -7,7 +7,7 @@ from models.workspace import Workspace
 from schemas.workspace import WorkspaceSchema
 
 workspace_schema = WorkspaceSchema()
-
+#I LIKE TURTLES AND ALSO MASTERS OF THE UNIVERSE!!!!
 
 class WorkspaceListResource(Resource):
     """Create new workspace"""
