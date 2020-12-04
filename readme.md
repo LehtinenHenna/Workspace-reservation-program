@@ -88,10 +88,10 @@ End point design:
 | GET | Gets information about all users | UserListResource.get | http://localhost:5000/users | Only accessible by Admin |  |
 | POST | Create a user | UserListResource.post | http://localhost:5000/users | Anyone can create a user |  |
 | GET | Get user information by username | UserResource.get | http://localhost:5000/users/<string:username> | Only accessible by Admin |  |
-| PUT | Modify any user's information | UserResource.put | http://localhost:5000/users/<string:username> | Only accessible by Admin; Admin can change any user's email, name or password |  |
+| PATCH | Modify any user's information | UserResource.patch | http://localhost:5000/users/<string:username> | Only accessible by Admin; Admin can change any user's email or name |  |
 | DELETE | Delete user account by username | UserResource.delete | http://localhost:5000/users/<string:username> | Only accessible by Admin |  |
 | GET | Get user's own information | MeResource.get | http://localhost:5000/me | Gets user's own username, email, future reservations |  |
-| PUT | Modify user's own information | MeResource.put | http://localhost:5000/me | User can modify their own username, email or password |  |
+| PATCH | Modify user's own information | MeResource.patch | http://localhost:5000/me | User can modify their own username or email |  |
 | DELETE | Delete user's own account | MeResource.delete | http://localhost:5000/me | Delete user's own account |  |
 | GET | Get user's own reservations | ReservationListResource.get | http://localhost:5000/reservations | Displays user's own reservations |  |
 | POST | Create a reservation | ReservationListResource.post | http://localhost:5000/reservations | Only for logged in users |  |
