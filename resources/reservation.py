@@ -8,6 +8,7 @@ from models.user import User
 from schemas.reservation import ReservationSchema
 
 reservation_schema = ReservationSchema()
+reservation_list_schema = ReservationSchema(many=True)
 
 
 class ReservationListResource(Resource):
@@ -34,7 +35,7 @@ class ReservationListResource(Resource):
         reservation.username = current_user
         reservation.save()
 
-        return reservation_schema.dump(reservation).data, HTTPStatus.CREATED
+        return reservation_list_schema.dump(reservation).data, HTTPStatus.CREATED
 
     
     @jwt_required
@@ -46,4 +47,4 @@ class ReservationListResource(Resource):
 
         reservations = Reservation.get_all_by_user(username=current_user)
 
-        return reservation_schema.dump(reservations).data, HTTPStatus.OK
+        return reservation_list_schema.dump(reservations).data, HTTPStatus.OK
