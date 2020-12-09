@@ -7,15 +7,19 @@ class Reservation(db.Model):
     start_time = db.Column(db.DateTime(), nullable=False)
     end_time = db.Column(db.DateTime(), nullable=False)
     workspace_id = db.Column(db.Integer(), db.ForeignKey("workspace.id"))
-    user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
+    username = db.Column(db.String(), db.ForeignKey("user.username")) 
 
     @classmethod
     def get_all_future_reservations(cls, today): # today = datetime.datetime.now() resource methodin JSONiin
         return cls.query.filter_by(start_time=today).all()
 
     @classmethod
-    def get_all_reservations_by_workspace_id(cls, workspace_id, today): # today = datetime.datetime.now() resource methodin JSONiin
-        return cls.query.filter_by(id=workspace_id, start_time=today).all()
+    def get_all_reservations_by_workspace_name(cls, workspace_name, today): # today = datetime.datetime.now() resource methodin JSONiin
+        return cls.query.filter_by(id=workspace_name, start_time=today).all()
+
+    @classmethod   
+    def get_all_by_user(cls, username):
+        return cls.query.filter_by(username=username).all()
 
     def save(self):
         db.session.add(self)
