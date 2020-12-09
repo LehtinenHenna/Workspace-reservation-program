@@ -12,11 +12,14 @@ reservation_schema = ReservationSchema()
 
 class ReservationListResource(Resource):
 
+    @jwt_required
     def post(self):
         """Create new reservation
         POST -> /reservations"""
         json_data = request.get_json()
         data, errors = reservation_schema.load(data=json_data)
+
+        current_user = get_jwt_identity()     # katsotaan kuka on kirjautunut käyttäjä
 
         if errors:
             return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
@@ -28,6 +31,7 @@ class ReservationListResource(Resource):
         #    return {'message': 'email already used'}, HTTPStatus.BAD_REQUEST
 
         reservation = Reservation(**data)
+        reservation.username = current_user
         reservation.save()
 
         return reservation_schema.dump(reservation).data, HTTPStatus.CREATED
