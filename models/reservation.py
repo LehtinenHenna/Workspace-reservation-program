@@ -17,7 +17,7 @@ class Reservation(db.Model):
     def get_all_reservations_by_workspace_name(cls, workspace_name, today): # today = datetime.datetime.now() resource methodin JSONiin
         return cls.query.filter_by(id=workspace_name, start_time=today).all()
 
-    @classmethod    # ei toimi vielä
+    @classmethod   
     def get_all_by_user(cls, username):
         return cls.query.filter_by(username=username).all()
 
