@@ -101,3 +101,4 @@ End point design:
 | POST | Create a json web token | TokenResource.post | http://localhost:5000/token |  | X |
 | POST | Create a refresh token | RefreshResource.post | http://localhost:5000/refresh |  | X |
 | POST | Blacklists token for logout | RevokeResource.post | http://localhost:5000/revoke |  | X |
+
