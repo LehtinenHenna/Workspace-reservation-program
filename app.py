@@ -19,7 +19,6 @@ def create_app():
 
     return app
 
-
 def register_extensions(app):
     db.app = app
     db.init_app(app)
@@ -42,11 +41,6 @@ def register_resources(app):
     api.add_resource(RevokeResource, "/revoke")
     api.add_resource(ReservationListResource, "/reservations")
     api.add_resource(WorkspaceListResource, "/workspaces")
-    #api.add_resource(RecipeListResource, "/recipes")
-    #api.add_resource(UserRecipeListResource, "/users/<string:username>/recipes")
-    #api.add_resource(RecipeResource, "/recipes/<int:recipe_id>")
-    #api.add_resource(RecipePublishResource, "/recipes/<int:recipe_id>/publish")
-
 
 if __name__ == "__main__":
     app = create_app()

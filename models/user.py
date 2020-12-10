@@ -12,16 +12,15 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
 
-    #recipes = db.relationship('Recipe', backref='user')
     reservations = db.relationship('Reservation', backref='user')
+
+    @classmethod
+    def get_all_users(cls):
+        return cls.query.all()
 
     @classmethod
     def get_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
-
-    @classmethod
-    def get_by_id(cls, id):
-        return cls.query.filter_by(id=id).first()
 
     @classmethod
     def get_by_username(cls, username):
