@@ -19,10 +19,6 @@ class Workspace(db.Model):
     def get_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
     
-    @classmethod
-    def get_by_id(cls, workspace_id):
-        return cls.query.filter_by(workspace_id=workspace_id).first()
-    
     def save(self):
         db.session.add(self)
         db.session.commit()
