@@ -14,12 +14,19 @@ class Reservation(db.Model):
         return cls.query.filter_by(start_time=today).all()
 
     @classmethod
-    def get_all_reservations_by_workspace_name(cls, workspace_name, today): # today = datetime.datetime.now() resource methodin JSONiin
-        return cls.query.filter_by(id=workspace_name, start_time=today).all()
+    def get_all_reservations_by_workspace_id(cls, workspace_id):  # poistin today parametrin tästä, koska varmistukset siitä että varaus on tulevaisuudessa on parempi tehdä resurssien metodeissa
+        return cls.query.filter_by(workspace_id=workspace_id).all()
 
     @classmethod   
     def get_all_by_user(cls, username):
         return cls.query.filter_by(username=username).all()
+
+    #def __setitem__(self, index, value):
+    
+                                                    # nämä tarvitaan ehkä iterointiin?
+    #def __getitem__(self,index):  
+    
+
 
     def save(self):
         db.session.add(self)
