@@ -76,4 +76,12 @@ class ReservationWorkspaceResource(Resource):
 
         reservations = Reservation.get_all_reservations_by_workspace_id(workspace_id=workspace_id)
 
-        return reservation_list_schema.dump(reservations).data, HTTPStatus.OK
+        now = datetime.datetime.now()
+
+        future_reservations = []
+
+        for reservation in reservations:
+            if reservation.start_time > now:
+                future_reservations.append(reservation)
+
+        return reservation_list_schema.dump(future_reservations).data, HTTPStatus.OK
