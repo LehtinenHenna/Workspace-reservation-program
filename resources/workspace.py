@@ -48,7 +48,7 @@ class WorkspaceResource(Resource):
     """Get specific workspace"""
     
     def get(self, name):
-        """GET <- /workspeces/name"""
+        """GET <- /workspaces/<string:name>"""
         workspace = Workspace.get_by_name(name=name)
         if workspace is None:
             return {'message': 'Workspace not found'}, HTTPStatus.NOT_FOUND
@@ -56,7 +56,7 @@ class WorkspaceResource(Resource):
 
     @jwt_required
     def put(self, name):
-        """PUT -> /workspaces/workspace_name"""
+        """PUT -> /workspaces/<string:name>"""
         json_data = request.get_json()
         workspace = Workspace.get_by_name(name=name)
 
@@ -66,10 +66,10 @@ class WorkspaceResource(Resource):
             if workspace is None:
                 return {'message': 'Workspace not found'}, HTTPStatus.NOT_FOUND
             else:
-                workspace.name = json_data('name')
-                workspace.user_limit = json_data('user_limit')
-                workspace.available_from = json_data('available_from')
-                workspace.available_till = json_data('available_till')
+                workspace.name = json_data['name']
+                workspace.user_limit = json_data['user_limit']
+                workspace.available_from = json_data['available_from']
+                workspace.available_till = json_data['available_till']
                 workspace.save()
                 return workspace.data(), HTTPStatus.OK
 
@@ -78,7 +78,7 @@ class WorkspaceResource(Resource):
 
     @jwt_required
     def delete(self, name):
-        """DELETE /workspaces/workspace_name"""
+        """DELETE /workspaces/<string:name>"""
         workspace = Workspace.get_by_name(name=name)
 
         current_user = get_jwt_identity()
@@ -95,6 +95,7 @@ class WorkspaceResource(Resource):
 
     @jwt_required
     def patch(self, name):
+        """PATCH -> /workspaces/<string:name>"""
         json_data = request.get_json()
         data, errors = workspace_schema.load(data=json_data, partial=('name',))
 
@@ -103,6 +104,7 @@ class WorkspaceResource(Resource):
         if current_user == "admin":
             if errors:
                 return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
+
             workspace = Workspace.get_by_name(name=name)
             if workspace is None:
                 return {'message': 'Workspace not found'}, HTTPStatus.NOT_FOUND

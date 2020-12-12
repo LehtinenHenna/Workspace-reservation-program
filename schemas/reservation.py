@@ -5,8 +5,10 @@ class ReservationSchema(Schema):
     id = fields.Integer(dump_only=True)
     start_time = fields.DateTime(required=True)
     end_time = fields.DateTime(required=True)
-    workspace_id = fields.Integer()
+    workspace_id = fields.Integer(required=True)
     username = fields.String(dump_only=True)
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
 
     @post_dump(pass_many=True)
     def wrap(self, data, many, **kwargs):

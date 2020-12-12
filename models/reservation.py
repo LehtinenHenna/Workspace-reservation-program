@@ -6,8 +6,10 @@ class Reservation(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     start_time = db.Column(db.DateTime(), nullable=False)
     end_time = db.Column(db.DateTime(), nullable=False)
-    workspace_id = db.Column(db.Integer(), db.ForeignKey("workspace.id"))
-    username = db.Column(db.String(), db.ForeignKey("user.username")) 
+    workspace_id = db.Column(db.Integer(), db.ForeignKey("workspace.id"), nullable=False)
+    username = db.Column(db.String(), db.ForeignKey("user.username"))
+    created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
 
     @classmethod
     def get_all_future_reservations(cls, today): # today = datetime.datetime.now() resource methodin JSONiin
