@@ -53,12 +53,12 @@ class ReservationListResource(Resource):
     
     @jwt_required
     def get(self):
-        """ Get user's own reservations
+        """ Get all reservations
          GET -> /reservations""" 
 
         current_user = get_jwt_identity()
 
-        reservations = Reservation.get_all_by_user(username=current_user)
+        reservations = Reservation.get_all_reservations()
 
         now = datetime.datetime.now()
         future_reservations = []
@@ -81,6 +81,47 @@ class ReservationWorkspaceResource(Resource):
 
         now = datetime.datetime.now()
 
+        future_reservations = []
+
+        for reservation in reservations:
+            if reservation.start_time > now:
+                future_reservations.append(reservation)
+
+        return reservation_list_schema.dump(future_reservations).data, HTTPStatus.OK
+
+class ReservationResource(Resource):
+
+    @jwt_required
+    def delete(self, reservation_id):
+        """ delete reservation by reservation id
+        DELETE -> /reservations/<int:reservation_id>"""
+
+        reservation = Reservation.get_by_id(reservation_id=reservation_id)
+
+        if reservation is None:
+            return {'message': 'Reservation not found'}, HTTPStatus.NOT_FOUND
+
+        current_user = get_jwt_identity()
+
+        if current_user != reservation.username:
+            return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
+        
+        reservation.delete()
+
+        return {}, HTTPStatus.NO_CONTENT
+
+class ReservationMeResource(Resource):
+
+    @jwt_required
+    def get(self):
+        """ Get user's own reservations
+         GET -> /reservations/me""" 
+
+        current_user = get_jwt_identity()
+
+        reservations = Reservation.get_all_by_user(username=current_user)
+
+        now = datetime.datetime.now()
         future_reservations = []
 
         for reservation in reservations:

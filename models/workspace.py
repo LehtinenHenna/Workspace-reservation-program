@@ -13,15 +13,6 @@ class Workspace(db.Model):
 
     reservations = db.relationship('Reservation', backref='workspace')
 
-    def data(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'user_limit': self.user_limit,
-            'available_from': self.available_from,
-            'available_till': self.available_till,
-            'reservations': self.reservations
-        }
 
     @classmethod
     def get_all(cls):
