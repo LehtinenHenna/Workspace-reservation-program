@@ -1,5 +1,4 @@
 from marshmallow import Schema, fields, post_dump, validate, validates, ValidationError
-from datetime import datetime
 
 class WorkspaceSchema(Schema):
     id = fields.Integer(dump_only=True)
