@@ -14,6 +14,7 @@ reservation_list_schema = ReservationSchema(many=True)
 
 class ReservationListResource(Resource):
 
+
     @jwt_required
     def post(self):
         """Create new reservation
@@ -29,7 +30,7 @@ class ReservationListResource(Resource):
         if data.get('end_time') < datetime.datetime.now():     # jos varauksen päättymisaika on menneisyydessä (silloin koko varaus on menneisyydessä)
             return {'message': 'Reservation time cannot be in the past'}, HTTPStatus.BAD_REQUEST
         
-        if data.get('start_time').hour < 16 or data.get('end_time').hour > 21:
+        if data.get('start_time').hour < 16 or data.get('end_time').hour > 21:  # varauksen voi tehdä vain klo 16 ja 21 välille
             return {'message': 'Reservations can only be made between 16:00 and 21:00'}, HTTPStatus.BAD_REQUEST
 
         workspace_id = data.get('workspace_id')
@@ -37,16 +38,11 @@ class ReservationListResource(Resource):
         book_start_time = data.get('start_time')  #start time user wants to book
         book_end_time = data.get('end_time')  #end time user wants to book
 
-        for reserv in meetingcollisions:
+        for reserv in meetingcollisions:    # tarkistetaan ettei päällekkäisiä varauksia ole samaan työtilaan
             # [a, b] overlaps with [x, y] if b > x and a < y
             if reserv.end_time > book_start_time and reserv.start_time < book_end_time:     # iterointi heittää jostain syystä erroria mutta toimii siitä huolimatta
                 return {'message': 'The selected meeting room is already booked at that time.'}, HTTPStatus.BAD_REQUEST
 
-        #if User.get_by_username(data.get('username')):
-        #    return {'message': 'username already used'}, HTTPStatus.BAD_REQUEST
-
-        #if User.get_by_email(data.get('email')):
-        #    return {'message': 'email already used'}, HTTPStatus.BAD_REQUEST
 
         reservation = Reservation(**data)
         reservation.username = current_user
@@ -64,7 +60,14 @@ class ReservationListResource(Resource):
 
         reservations = Reservation.get_all_by_user(username=current_user)
 
-        return reservation_list_schema.dump(reservations).data, HTTPStatus.OK
+        now = datetime.datetime.now()
+        future_reservations = []
+
+        for reservation in reservations:
+            if reservation.start_time > now:
+                future_reservations.append(reservation)
+
+        return reservation_list_schema.dump(future_reservations).data, HTTPStatus.OK
 
 
 class ReservationWorkspaceResource(Resource):
