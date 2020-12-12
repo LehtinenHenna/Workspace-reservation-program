@@ -6,8 +6,8 @@ class Workspace(db.Model):
     id = db.Column(db.Integer, primary_key=True) # automatic id tietokannasta
     name = db.Column(db.String(100), nullable=False)# tilan nimi
     user_limit = db.Column(db.Integer())# maksimi käyttäjämäärä
-    available_from = db.Column(db.Time(16))# kellonaika josta lähtien varattavissa 16 [datetime]
-    available_till = db.Column(db.Time(21)) # kellonaika johon asti varattavissa 21 [datetime]
+    available_from = db.Column(db.Time())# kellonaika josta lähtien varattavissa 16 [datetime]
+    available_till = db.Column(db.Time()) # kellonaika johon asti varattavissa 21 [datetime]
 
     reservations = db.relationship('Reservation', backref='workspace')
 
