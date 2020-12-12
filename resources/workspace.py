@@ -11,10 +11,11 @@ workspace_list_schema = WorkspaceSchema(many=True)
 
 
 class WorkspaceListResource(Resource):
-    """Create new workspace"""
+
 
     @jwt_required
     def post(self):
+        """Create new workspace"""
         """POST -> /workspaces"""
         json_data = request.get_json()
         data, errors = workspace_schema.load(data=json_data)
@@ -36,49 +37,30 @@ class WorkspaceListResource(Resource):
 
 
 
-    """Get all workspaces"""
 
     def get(self):
-        """GET <- /workspeces"""
+        """Get all workspaces"""
+        """GET -> /workspaces"""
         workspaces = Workspace.get_all()
         return workspace_list_schema.dump(workspaces).data, HTTPStatus.OK
 
 
 class WorkspaceResource(Resource):
-    """Get specific workspace"""
+
     
     def get(self, name):
-        """GET <- /workspeces/name"""
+        """Get specific workspace"""
+        """GET -> /workspaces/<string:name>"""
         workspace = Workspace.get_by_name(name=name)
         if workspace is None:
             return {'message': 'Workspace not found'}, HTTPStatus.NOT_FOUND
         return workspace_schema.dump(workspace).data, HTTPStatus.OK
 
-    @jwt_required
-    def put(self, name):
-        """PUT -> /workspaces/workspace_name"""
-        json_data = request.get_json()
-        workspace = Workspace.get_by_name(name=name)
-
-        current_user = get_jwt_identity()
-
-        if current_user == "admin":
-            if workspace is None:
-                return {'message': 'Workspace not found'}, HTTPStatus.NOT_FOUND
-            else:
-                workspace.name = json_data('name')
-                workspace.user_limit = json_data('user_limit')
-                workspace.available_from = json_data('available_from')
-                workspace.available_till = json_data('available_till')
-                workspace.save()
-                return workspace.data(), HTTPStatus.OK
-
-        else:
-            return {"message": "no admin authorization"}, HTTPStatus.FORBIDDEN
 
     @jwt_required
     def delete(self, name):
-        """DELETE /workspaces/workspace_name"""
+        """Deletes a workspace"""
+        """DELETE /workspaces/<string:name>"""
         workspace = Workspace.get_by_name(name=name)
 
         current_user = get_jwt_identity()
@@ -95,6 +77,8 @@ class WorkspaceResource(Resource):
 
     @jwt_required
     def patch(self, name):
+        """Modifies a workspace"""
+        """PATCH -> /workspaces/<string:name>"""
         json_data = request.get_json()
         data, errors = workspace_schema.load(data=json_data, partial=('name',))
 
@@ -103,6 +87,7 @@ class WorkspaceResource(Resource):
         if current_user == "admin":
             if errors:
                 return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
+
             workspace = Workspace.get_by_name(name=name)
             if workspace is None:
                 return {'message': 'Workspace not found'}, HTTPStatus.NOT_FOUND

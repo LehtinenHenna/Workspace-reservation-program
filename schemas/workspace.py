@@ -6,6 +6,8 @@ class WorkspaceSchema(Schema):
     user_limit = fields.Integer(required=True)
     available_from = fields.Time(required=True)
     available_till = fields.Time(required=True)
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
 
     @post_dump(pass_many=True)
     def wrap(self, data, many, **kwargs):
