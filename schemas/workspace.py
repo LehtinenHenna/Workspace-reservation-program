@@ -4,8 +4,8 @@ class WorkspaceSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True, validate=[validate.Length(max=100)])
     user_limit = fields.Integer(required=True)
-    available_from = fields.Time(required=True)
-    available_till = fields.Time(required=True)
+    available_from = fields.Time()
+    available_till = fields.Time()
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
 
