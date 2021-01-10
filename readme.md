@@ -1,4 +1,4 @@
-Workspace booking system
+Workspace reservation program
 
 We made a workspace booking system as a group project for our application programming course.
 Members of our group: Joonas, Atte, Henna, Timo, Roni. 
