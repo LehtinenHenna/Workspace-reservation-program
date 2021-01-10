@@ -1,6 +1,12 @@
-Tilanvarausjärjestelmä
+Workspace booking system
 
--	Tiloja voi varata vain klo 16-21 välillä
+We made a workspace booking system as a group project for our application programming course.
+Members of our group: Joonas, Atte, Henna, Timo, Roni. 
+All code is based on the book Python API Development Fundamentals by Jack Chan, Ray Chung and Jack Huang.
+
+Here's some information about the project:
+
+-	Workspaces can only be booked between 16 and 21 o'clock
 
 -	Database tables (db.Models):
     o   users  
@@ -31,33 +37,27 @@ Tilanvarausjärjestelmä
 
 
 
--	Käyttäjän tehdessä varausta ohjelma tarkistaa databasesta ettei päällekkäisiä varauksia ole  
-        
--	Poistetaan publish toiminto. Eli kun varaus tehdään, se on automaattisesti julkinen  
+-	When a user is making a reservation, the program checks that there are no overlapping reservations
 
--	Käyttäjälle pitäisi näkyä vain tulevat varaukset  
+-	A user should only see future reservations
  
 
 
-- Admin tunnukset: Tehdään käyttäjä jonka nimi on Admin, ohjelma tarkistaa if current_user=="Admin" ennenkuin antaa käyttöoikeudet. Vain Admin voi:  
-    o   kirjautua sisään  
-    o   luoda uusia / muokata / poistaa työtiloja  
-    o   tarkastella kaikkia tulevia ja menneitä varauksia mukaanlukien varaajan tiedot  
-    o   tarkastella kaikkia käyttäjiä tai tiettyä käyttäjää, muokata käyttäjätunnuksia / poistaa käyttäjätunnuksia  
+- Admin user: Let's create a user with the name "admin" in the database, the program will check if current_user=="admin" before it gives the user admin rights. Only an admin can:   
+    o   create new workspaces / modify existing workspaces / delete workspaces  
+    o   look at information about all users or about a specific user, modify any user's information or delete any user account
       
 
-- Peruskäyttäjä voi:  
-    o   luoda käyttäjätunnuksen  
-    o   kirjautua sisään  
-    o   luoda varauksen  
-    o   tarkastella kaikkia tulevia varauksia ja kaikkia omia varauksiaan  
-    o   tarkastella varauksia työtilan id:n mukaan  
-    o   perua oman tulevan varauksensa  
-    o   tarkastella kaikkia työtiloja tai tiettyä työtilaa  
-    o   tarkastella / muokata / poistaa omat käyttäjätunnukset  
-
-
-- Käyttäjän näkymä varauksia hakiessa: Jos mahdollista, olisi hyvä jos käyttäjän hakiessa tiloja jokaisen tilan kohdalla näkyisi milloin se kyseinen tila on varattavissa (tai jos se on liian vaikeaa niin vaihtoehtoisesti käyttäjä näkee kunkin tilan kohdalla siihen tilaan tehdyt varaukset), sen sijaan että käyttäjä joutuisi erikseen hakemaan listauksen tiloista ja listauksen varauksista  
+- Basic user can:  
+    o   create a user account 
+    o   log in  
+    o   create a reservation 
+    o   look up all future reservations made by anyone and all their own reservations 
+    o   look up reservations based on workspace name 
+    o   delete their own future reservation
+    o   look up all workspaces or a specific workspace 
+    o   look up / modify / delete their own user account
+  
 
 
 End point design:  
@@ -100,13 +100,19 @@ Other tasks:
 | End point design table | Henna |
 
 
+-   To use this program one must install PostgreSQL and create a database: 
+    Once PostgreSQL is installed open pgAdmin. 
+    Create a 'Login/Group Role' and give it a username in the 'General' tab and a password in the 'Definition' tab. In the 'Privileges'
+    tab change the 'Can login?' option to 'yes'. Then create a database, and make the owner of that database the user you just created.
+    Give the database also a name.
 
-Self assessment for points:  
-  
-All minimum requirements filled: 15/15 points  
-Login functionality +5 points  
-Data validation with marshmallow +5 points  
-MVC architectural pattern followed +5 points  
-Project managed and developed with Git and GitHub +5 points  
+    In the program code in the file config.py in SQLALCHEMY_DATABASE_URI definition, replace username:password with the ones 
+    you just created for the Login/Group Role and database_name with the name of the database you just created. 
+    To create the tables for the database, go to the terminal in your programming environment and run first the command flask db init
+    to initialize the database. Then run the command flask db migrate. Finally, run the command flask db upgrade.
+    If everything worked like it should, you should now see the tables in your database when you look at it in pgAdmin.
+    More detailed instructions can be found from the book Python API Development Fundamentals.
 
-Total points: 35/35  
+-   All required packages are listed in requirements.txt
+
+-   We did all testing for this project with Postman.

@@ -5,7 +5,7 @@ class User(db.Model):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True) 
-    username = db.Column(db.String(80), nullable=False, unique=True) #luodaan adminkäyttäjä nimellä "admin" ja vain kirjautuneella current_user=="admin" oikeudet tehdä admin muutoksia
+    username = db.Column(db.String(80), nullable=False, unique=True) # Create an admin user with username "admin" and only when current_user=="admin" it's possible to use admin resources
     email = db.Column(db.String(200), nullable=False, unique=True)
     password = db.Column(db.String(200))
     is_active = db.Column(db.Boolean(), default=False)

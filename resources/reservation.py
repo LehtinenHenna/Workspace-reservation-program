@@ -22,25 +22,25 @@ class ReservationListResource(Resource):
         json_data = request.get_json()
         data, errors = reservation_schema.load(data=json_data)
 
-        current_user = get_jwt_identity()     # katsotaan kuka on kirjautunut käyttäjä
+        current_user = get_jwt_identity()     # check who is the logged in user. get_jwt_identity() returns username.
 
         if errors:
             return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
 
-        if data.get('end_time') < datetime.datetime.now():     # jos varauksen päättymisaika on menneisyydessä (silloin koko varaus on menneisyydessä)
+        if data.get('end_time') < datetime.datetime.now():     # if the ending time of the reservation is in the past the whole reservation is in the past
             return {'message': 'Reservation time cannot be in the past'}, HTTPStatus.BAD_REQUEST
         
-        if data.get('start_time').hour < 16 or data.get('end_time').hour > 21:  # varauksen voi tehdä vain klo 16 ja 21 välille
+        if data.get('start_time').hour < 16 or data.get('end_time').hour > 21:  # the reservations can only be made between 16 and 21 o'clock
             return {'message': 'Reservations can only be made between 16:00 and 21:00'}, HTTPStatus.BAD_REQUEST
 
         workspace_id = data.get('workspace_id')
-        meetingcollisions = Reservation.get_all_reservations_by_workspace_id(workspace_id=workspace_id)    # kaikki samaan työtilaan tehdyt varaukset
+        meetingcollisions = Reservation.get_all_reservations_by_workspace_id(workspace_id=workspace_id)    # all the reservations made to the same workspace
         book_start_time = data.get('start_time')  #start time user wants to book
         book_end_time = data.get('end_time')  #end time user wants to book
 
-        for reserv in meetingcollisions:    # tarkistetaan ettei päällekkäisiä varauksia ole samaan työtilaan
+        for reserv in meetingcollisions:    # let's check that there's no overlapping reservations to the same workspace
             # [a, b] overlaps with [x, y] if b > x and a < y
-            if reserv.end_time > book_start_time and reserv.start_time < book_end_time:     # iterointi heittää jostain syystä erroria mutta toimii siitä huolimatta
+            if reserv.end_time > book_start_time and reserv.start_time < book_end_time:     # the reservation works but iteration is throwing an error
                 return {'message': 'The selected meeting room is already booked at that time.'}, HTTPStatus.BAD_REQUEST
 
 

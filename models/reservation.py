@@ -16,7 +16,7 @@ class Reservation(db.Model):
         return cls.query.filter_by().all()
 
     @classmethod
-    def get_all_reservations_by_workspace_id(cls, workspace_id):  # poistin today parametrin tästä, koska varmistukset siitä että varaus on tulevaisuudessa on parempi tehdä resurssien metodeissa
+    def get_all_reservations_by_workspace_id(cls, workspace_id): 
         return cls.query.filter_by(workspace_id=workspace_id).all()
 
     @classmethod   
@@ -26,12 +26,6 @@ class Reservation(db.Model):
     @classmethod
     def get_by_id(cls, reservation_id):
         return cls.query.filter_by(id=reservation_id).first()
-
-    #def __setitem__(self, index, value):
-    
-                                                    # nämä tarvitaan ehkä iterointiin?
-    #def __getitem__(self,index):  
-
     
 
     def save(self):

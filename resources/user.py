@@ -87,7 +87,7 @@ class UserResource(Resource):
         if current_user == "admin":
             user.username = data.get("username") or user.username
             user.email = data.get("email") or user.email
-            user.password = user.password #password vaihto ei toimi oikein hashien kanssa
+            user.password = user.password # changing password isn't working as it should with the hashes
 
             user.save()
 
@@ -139,7 +139,7 @@ class MeResource(Resource):
 
         user.username = data.get("username") or user.username
         user.email = data.get("email") or user.email
-        user.password = user.password #password vaihto ei toimi oikein hashien kanssa
+        user.password = user.password # changing password isn't working as it should with the hashes
 
         user.save()
 

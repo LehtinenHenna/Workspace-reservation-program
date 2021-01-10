@@ -31,7 +31,7 @@ class TokenResource(Resource):
         if not user or not check_password(password, user.password):
             return {'message': 'username or password is incorrect'}, HTTPStatus.UNAUTHORIZED
 
-        access_token = create_access_token(identity=user.username, fresh=True) # vaihdetu identity user.id -> user.username
+        access_token = create_access_token(identity=user.username, fresh=True) # changed identity from user.id to user.username
         refresh_token = create_refresh_token(identity=user.username)
 
         return {'access_token': access_token, 'refresh_token': refresh_token}, HTTPStatus.OK
